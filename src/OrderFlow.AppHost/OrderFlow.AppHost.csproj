@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.5.2" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>4156e7a4-b5dc-4c47-87c7-cf128d2128d2</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" />
+    <PackageReference Include="Aspire.Hosting.SqlServer" />
+    <PackageReference Include="MessagePack" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Services\Catalog\OrderFlow.Catalog.Api\OrderFlow.Catalog.Api.csproj" />
+    <ProjectReference Include="..\Services\Orders\OrderFlow.Orders.Api\OrderFlow.Orders.Api.csproj" />
+    <ProjectReference Include="..\Services\Payments\OrderFlow.Payments.Worker\OrderFlow.Payments.Worker.csproj" />
+    <ProjectReference Include="..\OrderFlow.Gateway\OrderFlow.Gateway.csproj" />
+  </ItemGroup>
+
+</Project>

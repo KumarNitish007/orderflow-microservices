@@ -1,0 +1,50 @@
+# Sample requests (VS Code REST Client / Visual Studio / Rider).
+# Set @gateway to the gateway URL shown in the Aspire dashboard.
+@gateway = http://localhost:5100
+
+### Catalogue with live stock
+GET {{gateway}}/api/products
+
+### Place an order (happy path)
+# @name placeOrder
+POST {{gateway}}/api/orders
+Content-Type: application/json
+Idempotency-Key: demo-order-001
+
+{
+  "customerEmail": "buyer@example.com",
+  "items": [
+    { "sku": "KB-MECH-01", "quantity": 1 },
+    { "sku": "MS-WL-02", "quantity": 2 }
+  ]
+}
+
+### Follow the order (Submitted -> AwaitingStock -> AwaitingPayment -> Completed)
+GET {{gateway}}/api/orders/{{placeOrder.response.body.$.orderId}}
+
+### Payment declined -> Failed, stock released (compensation)
+POST {{gateway}}/api/orders
+Content-Type: application/json
+
+{
+  "customerEmail": "decline@example.com",
+  "items": [ { "sku": "CAM-HD-1080", "quantity": 1 } ]
+}
+
+### Out of stock -> Failed, nothing charged
+POST {{gateway}}/api/orders
+Content-Type: application/json
+
+{
+  "customerEmail": "buyer@example.com",
+  "items": [ { "sku": "SSD-NVME-1T", "quantity": 10 } ]
+}
+
+### Restock a product
+POST {{gateway}}/api/products/SSD-NVME-1T/restock
+Content-Type: application/json
+
+{ "quantity": 20 }
+
+### Orders for a customer
+GET {{gateway}}/api/orders?email=buyer@example.com
